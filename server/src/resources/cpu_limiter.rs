@@ -10,6 +10,7 @@ pub struct CpuLimiter {
     limits: Arc<RwLock<CpuLimits>>,
     system: Arc<RwLock<System>>,
     pid: u32,
+    #[allow(dead_code)]
     original_affinity: Option<Vec<usize>>,
     _monitor_handle: Option<thread::JoinHandle<()>>,
     shutdown: Arc<RwLock<bool>>,
@@ -51,7 +52,7 @@ impl CpuLimiter {
         Ok(())
     }
 
-    fn set_cpu_affinity(&self, cores: f32) -> Result<(), ResourceError> {
+    fn set_cpu_affinity(&self, _cores: f32) -> Result<(), ResourceError> {
         #[cfg(target_os = "linux")]
         {
             use libc::{cpu_set_t, sched_setaffinity, CPU_SET, CPU_ZERO};
@@ -151,7 +152,7 @@ impl CpuLimiter {
         }
     }
 
-    fn apply_cgroup_limits(&self, limits: &CpuLimits) -> Result<(), ResourceError> {
+    fn apply_cgroup_limits(&self, _limits: &CpuLimits) -> Result<(), ResourceError> {
         #[cfg(target_os = "linux")]
         {
             // Try cgroups v2 first
@@ -167,7 +168,8 @@ impl CpuLimiter {
         Ok(())
     }
 
-    fn apply_cgroup_v2_limits(&self, limits: &CpuLimits) -> Result<(), ResourceError> {
+    #[allow(dead_code)]
+    fn apply_cgroup_v2_limits(&self, _limits: &CpuLimits) -> Result<(), ResourceError> {
         #[cfg(target_os = "linux")]
         {
             use std::fs;
@@ -202,7 +204,8 @@ impl CpuLimiter {
         Ok(())
     }
 
-    fn apply_cgroup_v1_limits(&self, limits: &CpuLimits) -> Result<(), ResourceError> {
+    #[allow(dead_code)]
+    fn apply_cgroup_v1_limits(&self, _limits: &CpuLimits) -> Result<(), ResourceError> {
         #[cfg(target_os = "linux")]
         {
             use std::fs;

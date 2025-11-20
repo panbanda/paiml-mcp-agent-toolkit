@@ -1014,6 +1014,7 @@ impl CommandDispatcher {
             OutputFormat::Json => QualityGateOutputFormat::Json,
             OutputFormat::Table => QualityGateOutputFormat::Summary,
             OutputFormat::Yaml => QualityGateOutputFormat::Summary,
+            OutputFormat::Toon => QualityGateOutputFormat::Toon,
         };
 
         // Convert check strings to QualityCheckType
@@ -1078,6 +1079,7 @@ impl CommandDispatcher {
             OutputFormat::Json => ReportOutputFormat::Json,
             OutputFormat::Table => ReportOutputFormat::Text,
             OutputFormat::Yaml => ReportOutputFormat::Text,
+            OutputFormat::Toon => ReportOutputFormat::Toon,
         };
 
         // Convert analysis strings to AnalysisType

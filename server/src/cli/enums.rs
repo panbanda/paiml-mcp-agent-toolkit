@@ -29,6 +29,7 @@ pub enum OutputFormat {
     Table,
     Json,
     Yaml,
+    Toon,
 }
 
 impl fmt::Display for OutputFormat {
@@ -37,6 +38,7 @@ impl fmt::Display for OutputFormat {
             OutputFormat::Table => write!(f, "table"),
             OutputFormat::Json => write!(f, "json"),
             OutputFormat::Yaml => write!(f, "yaml"),
+            OutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -59,7 +61,7 @@ impl fmt::Display for ExplainLevel {
     }
 }
 
-/// Enforce output format  
+/// Enforce output format
 #[derive(Clone, Copy, Debug, ValueEnum, PartialEq, Serialize, Deserialize)]
 pub enum EnforceOutputFormat {
     /// Summary output
@@ -70,6 +72,8 @@ pub enum EnforceOutputFormat {
     Progress,
     /// SARIF format
     Sarif,
+    /// Toon format
+    Toon,
 }
 
 impl fmt::Display for EnforceOutputFormat {
@@ -79,6 +83,7 @@ impl fmt::Display for EnforceOutputFormat {
             EnforceOutputFormat::Json => write!(f, "json"),
             EnforceOutputFormat::Progress => write!(f, "progress"),
             EnforceOutputFormat::Sarif => write!(f, "sarif"),
+            EnforceOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -89,6 +94,7 @@ pub enum RefactorOutputFormat {
     Json,
     Table,
     Summary,
+    Toon,
 }
 
 impl fmt::Display for RefactorOutputFormat {
@@ -97,6 +103,7 @@ impl fmt::Display for RefactorOutputFormat {
             RefactorOutputFormat::Json => write!(f, "json"),
             RefactorOutputFormat::Table => write!(f, "table"),
             RefactorOutputFormat::Summary => write!(f, "summary"),
+            RefactorOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -107,6 +114,7 @@ pub enum PromptOutputFormat {
     Yaml,
     Json,
     Text,
+    Toon,
 }
 
 impl fmt::Display for PromptOutputFormat {
@@ -115,6 +123,7 @@ impl fmt::Display for PromptOutputFormat {
             PromptOutputFormat::Yaml => write!(f, "yaml"),
             PromptOutputFormat::Json => write!(f, "json"),
             PromptOutputFormat::Text => write!(f, "text"),
+            PromptOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -144,6 +153,8 @@ pub enum RefactorAutoOutputFormat {
     Detailed,
     /// JSON format for automation
     Json,
+    /// Toon format
+    Toon,
 }
 
 impl fmt::Display for RefactorAutoOutputFormat {
@@ -152,6 +163,7 @@ impl fmt::Display for RefactorAutoOutputFormat {
             RefactorAutoOutputFormat::Summary => write!(f, "summary"),
             RefactorAutoOutputFormat::Detailed => write!(f, "detailed"),
             RefactorAutoOutputFormat::Json => write!(f, "json"),
+            RefactorAutoOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -167,6 +179,8 @@ pub enum RefactorDocsOutputFormat {
     Json,
     /// Interactive mode for confirmation
     Interactive,
+    /// Toon format
+    Toon,
 }
 
 impl fmt::Display for RefactorDocsOutputFormat {
@@ -176,6 +190,7 @@ impl fmt::Display for RefactorDocsOutputFormat {
             RefactorDocsOutputFormat::Detailed => write!(f, "detailed"),
             RefactorDocsOutputFormat::Json => write!(f, "json"),
             RefactorDocsOutputFormat::Interactive => write!(f, "interactive"),
+            RefactorDocsOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -210,6 +225,7 @@ pub enum ContextFormat {
     Sarif,
     #[value(name = "llm-optimized")]
     LlmOptimized,
+    Toon,
 }
 
 impl fmt::Display for ContextFormat {
@@ -219,6 +235,7 @@ impl fmt::Display for ContextFormat {
             ContextFormat::Json => write!(f, "json"),
             ContextFormat::Sarif => write!(f, "sarif"),
             ContextFormat::LlmOptimized => write!(f, "llm-optimized"),
+            ContextFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -230,6 +247,7 @@ pub enum TdgOutputFormat {
     Json,
     Markdown,
     Sarif,
+    Toon,
 }
 
 impl fmt::Display for TdgOutputFormat {
@@ -239,6 +257,7 @@ impl fmt::Display for TdgOutputFormat {
             TdgOutputFormat::Json => write!(f, "json"),
             TdgOutputFormat::Markdown => write!(f, "markdown"),
             TdgOutputFormat::Sarif => write!(f, "sarif"),
+            TdgOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -254,6 +273,8 @@ pub enum MakefileOutputFormat {
     Gcc,
     /// SARIF format for CI/CD integration
     Sarif,
+    /// Toon format
+    Toon,
 }
 
 impl fmt::Display for MakefileOutputFormat {
@@ -263,6 +284,7 @@ impl fmt::Display for MakefileOutputFormat {
             MakefileOutputFormat::Json => write!(f, "json"),
             MakefileOutputFormat::Gcc => write!(f, "gcc"),
             MakefileOutputFormat::Sarif => write!(f, "sarif"),
+            MakefileOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -281,6 +303,8 @@ pub enum LintHotspotOutputFormat {
     EnforcementJson,
     /// SARIF format for CI/CD integration
     Sarif,
+    /// Toon format
+    Toon,
 }
 
 impl fmt::Display for LintHotspotOutputFormat {
@@ -291,6 +315,7 @@ impl fmt::Display for LintHotspotOutputFormat {
             LintHotspotOutputFormat::Json => write!(f, "json"),
             LintHotspotOutputFormat::EnforcementJson => write!(f, "enforcement-json"),
             LintHotspotOutputFormat::Sarif => write!(f, "sarif"),
+            LintHotspotOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -308,6 +333,8 @@ pub enum ProvabilityOutputFormat {
     Sarif,
     /// Markdown report format
     Markdown,
+    /// Toon format
+    Toon,
 }
 
 impl fmt::Display for ProvabilityOutputFormat {
@@ -318,6 +345,7 @@ impl fmt::Display for ProvabilityOutputFormat {
             ProvabilityOutputFormat::Json => write!(f, "json"),
             ProvabilityOutputFormat::Sarif => write!(f, "sarif"),
             ProvabilityOutputFormat::Markdown => write!(f, "markdown"),
+            ProvabilityOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -365,6 +393,8 @@ pub enum DefectPredictionOutputFormat {
     Csv,
     /// SARIF format for IDE integration
     Sarif,
+    /// Toon format
+    Toon,
 }
 
 impl fmt::Display for DefectPredictionOutputFormat {
@@ -375,6 +405,7 @@ impl fmt::Display for DefectPredictionOutputFormat {
             DefectPredictionOutputFormat::Json => write!(f, "json"),
             DefectPredictionOutputFormat::Csv => write!(f, "csv"),
             DefectPredictionOutputFormat::Sarif => write!(f, "sarif"),
+            DefectPredictionOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -392,6 +423,8 @@ pub enum ComprehensiveOutputFormat {
     Markdown,
     /// SARIF format for IDE integration
     Sarif,
+    /// Toon format
+    Toon,
 }
 
 impl fmt::Display for ComprehensiveOutputFormat {
@@ -402,6 +435,7 @@ impl fmt::Display for ComprehensiveOutputFormat {
             ComprehensiveOutputFormat::Json => write!(f, "json"),
             ComprehensiveOutputFormat::Markdown => write!(f, "markdown"),
             ComprehensiveOutputFormat::Sarif => write!(f, "sarif"),
+            ComprehensiveOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -463,6 +497,8 @@ pub enum GraphMetricsOutputFormat {
     GraphML,
     /// Markdown report format
     Markdown,
+    /// TOON format for LLM-optimized output
+    Toon,
 }
 
 impl GraphMetricsOutputFormat {
@@ -476,6 +512,7 @@ impl GraphMetricsOutputFormat {
             GraphMetricsOutputFormat::Csv => "csv",
             GraphMetricsOutputFormat::GraphML => "graphml",
             GraphMetricsOutputFormat::Markdown => "markdown",
+            GraphMetricsOutputFormat::Toon => "toon",
         }
     }
 }
@@ -525,6 +562,8 @@ pub enum NameSimilarityOutputFormat {
     Csv,
     /// Markdown report format
     Markdown,
+    /// Toon format
+    Toon,
 }
 
 impl fmt::Display for NameSimilarityOutputFormat {
@@ -536,6 +575,7 @@ impl fmt::Display for NameSimilarityOutputFormat {
             NameSimilarityOutputFormat::Json => write!(f, "json"),
             NameSimilarityOutputFormat::Csv => write!(f, "csv"),
             NameSimilarityOutputFormat::Markdown => write!(f, "markdown"),
+            NameSimilarityOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -555,6 +595,8 @@ pub enum DuplicateOutputFormat {
     Csv,
     /// SARIF format for IDE integration
     Sarif,
+    /// Toon format
+    Toon,
 }
 
 impl fmt::Display for DuplicateOutputFormat {
@@ -566,6 +608,7 @@ impl fmt::Display for DuplicateOutputFormat {
             DuplicateOutputFormat::Json => write!(f, "json"),
             DuplicateOutputFormat::Csv => write!(f, "csv"),
             DuplicateOutputFormat::Sarif => write!(f, "sarif"),
+            DuplicateOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -581,6 +624,8 @@ pub enum ComplexityOutputFormat {
     Json,
     /// SARIF format for IDE integration
     Sarif,
+    /// Toon format
+    Toon,
 }
 
 impl fmt::Display for ComplexityOutputFormat {
@@ -590,6 +635,7 @@ impl fmt::Display for ComplexityOutputFormat {
             ComplexityOutputFormat::Full => write!(f, "full"),
             ComplexityOutputFormat::Json => write!(f, "json"),
             ComplexityOutputFormat::Sarif => write!(f, "sarif"),
+            ComplexityOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -601,6 +647,7 @@ pub enum DeadCodeOutputFormat {
     Json,
     Sarif,
     Markdown,
+    Toon,
 }
 
 impl fmt::Display for DeadCodeOutputFormat {
@@ -610,6 +657,7 @@ impl fmt::Display for DeadCodeOutputFormat {
             DeadCodeOutputFormat::Json => write!(f, "json"),
             DeadCodeOutputFormat::Sarif => write!(f, "sarif"),
             DeadCodeOutputFormat::Markdown => write!(f, "markdown"),
+            DeadCodeOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -621,6 +669,7 @@ pub enum SatdOutputFormat {
     Json,
     Sarif,
     Markdown,
+    Toon,
 }
 
 impl fmt::Display for SatdOutputFormat {
@@ -630,6 +679,7 @@ impl fmt::Display for SatdOutputFormat {
             SatdOutputFormat::Json => write!(f, "json"),
             SatdOutputFormat::Sarif => write!(f, "sarif"),
             SatdOutputFormat::Markdown => write!(f, "markdown"),
+            SatdOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -667,6 +717,8 @@ pub enum SymbolTableOutputFormat {
     Json,
     /// CSV format for spreadsheets
     Csv,
+    /// Toon format
+    Toon,
 }
 
 impl fmt::Display for SymbolTableOutputFormat {
@@ -677,6 +729,7 @@ impl fmt::Display for SymbolTableOutputFormat {
             SymbolTableOutputFormat::Human => write!(f, "human"),
             SymbolTableOutputFormat::Json => write!(f, "json"),
             SymbolTableOutputFormat::Csv => write!(f, "csv"),
+            SymbolTableOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -692,6 +745,8 @@ pub enum BigOOutputFormat {
     Markdown,
     /// Detailed analysis with all functions
     Detailed,
+    /// Toon format
+    Toon,
 }
 
 impl fmt::Display for BigOOutputFormat {
@@ -701,6 +756,7 @@ impl fmt::Display for BigOOutputFormat {
             BigOOutputFormat::Json => write!(f, "json"),
             BigOOutputFormat::Markdown => write!(f, "markdown"),
             BigOOutputFormat::Detailed => write!(f, "detailed"),
+            BigOOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -772,6 +828,7 @@ pub enum DeepContextOutputFormat {
     Markdown,
     Json,
     Sarif,
+    Toon,
 }
 
 impl fmt::Display for DeepContextOutputFormat {
@@ -780,6 +837,7 @@ impl fmt::Display for DeepContextOutputFormat {
             DeepContextOutputFormat::Markdown => write!(f, "markdown"),
             DeepContextOutputFormat::Json => write!(f, "json"),
             DeepContextOutputFormat::Sarif => write!(f, "sarif"),
+            DeepContextOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -859,6 +917,7 @@ pub enum ProofAnnotationOutputFormat {
     Json,
     Markdown,
     Sarif,
+    Toon,
 }
 
 impl fmt::Display for ProofAnnotationOutputFormat {
@@ -869,6 +928,7 @@ impl fmt::Display for ProofAnnotationOutputFormat {
             ProofAnnotationOutputFormat::Json => write!(f, "json"),
             ProofAnnotationOutputFormat::Markdown => write!(f, "markdown"),
             ProofAnnotationOutputFormat::Sarif => write!(f, "sarif"),
+            ProofAnnotationOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -942,6 +1002,7 @@ pub enum IncrementalCoverageOutputFormat {
     Lcov,
     Delta,
     Sarif,
+    Toon,
 }
 
 impl IncrementalCoverageOutputFormat {
@@ -955,6 +1016,7 @@ impl IncrementalCoverageOutputFormat {
             IncrementalCoverageOutputFormat::Lcov => "lcov",
             IncrementalCoverageOutputFormat::Delta => "delta",
             IncrementalCoverageOutputFormat::Sarif => "sarif",
+            IncrementalCoverageOutputFormat::Toon => "toon",
         }
     }
 }
@@ -974,6 +1036,7 @@ pub enum QualityGateOutputFormat {
     Json,
     Junit,
     Markdown,
+    Toon,
 }
 
 impl fmt::Display for QualityGateOutputFormat {
@@ -985,6 +1048,7 @@ impl fmt::Display for QualityGateOutputFormat {
             QualityGateOutputFormat::Json => write!(f, "json"),
             QualityGateOutputFormat::Junit => write!(f, "junit"),
             QualityGateOutputFormat::Markdown => write!(f, "markdown"),
+            QualityGateOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -1006,6 +1070,8 @@ pub enum ReportOutputFormat {
     Pdf,
     /// Dashboard format (legacy)
     Dashboard,
+    /// Toon format
+    Toon,
 }
 
 impl ReportOutputFormat {
@@ -1019,6 +1085,7 @@ impl ReportOutputFormat {
             ReportOutputFormat::Html => "html",
             ReportOutputFormat::Pdf => "pdf",
             ReportOutputFormat::Dashboard => "dashboard",
+            ReportOutputFormat::Toon => "toon",
         }
     }
 }
@@ -1040,6 +1107,8 @@ pub enum RepoScoreOutputFormat {
     Markdown,
     /// YAML format
     Yaml,
+    /// Toon format
+    Toon,
 }
 
 impl RepoScoreOutputFormat {
@@ -1050,6 +1119,7 @@ impl RepoScoreOutputFormat {
             RepoScoreOutputFormat::Json => "json",
             RepoScoreOutputFormat::Markdown => "markdown",
             RepoScoreOutputFormat::Yaml => "yaml",
+            RepoScoreOutputFormat::Toon => "toon",
         }
     }
 }
@@ -1207,6 +1277,41 @@ mod tests {
         assert_eq!(EntropySeverity::Low, EntropySeverity::Low);
         assert_ne!(EntropySeverity::Low, EntropySeverity::High);
     }
+
+    #[test]
+    fn test_toon_format_display() {
+        // Test that all format enums with Toon variant display as "toon"
+        assert_eq!(OutputFormat::Toon.to_string(), "toon");
+        assert_eq!(ContextFormat::Toon.to_string(), "toon");
+        assert_eq!(TdgOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(ComplexityOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(DeadCodeOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(SatdOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(SymbolTableOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(BigOOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(DuplicateOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(DefectPredictionOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(ComprehensiveOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(GraphMetricsOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(NameSimilarityOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(ProvabilityOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(ProofAnnotationOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(IncrementalCoverageOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(QualityGateOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(ReportOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(RepoScoreOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(WasmOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(DeepWasmOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(EntropyOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(EnforceOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(RefactorOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(PromptOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(MakefileOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(LintHotspotOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(RefactorAutoOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(RefactorDocsOutputFormat::Toon.to_string(), "toon");
+        assert_eq!(DeepContextOutputFormat::Toon.to_string(), "toon");
+    }
 }
 
 /// Entropy analysis output format
@@ -1220,6 +1325,8 @@ pub enum EntropyOutputFormat {
     Json,
     /// Markdown report
     Markdown,
+    /// Toon format
+    Toon,
 }
 
 impl fmt::Display for EntropyOutputFormat {
@@ -1229,6 +1336,7 @@ impl fmt::Display for EntropyOutputFormat {
             EntropyOutputFormat::Detailed => write!(f, "detailed"),
             EntropyOutputFormat::Json => write!(f, "json"),
             EntropyOutputFormat::Markdown => write!(f, "markdown"),
+            EntropyOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -1265,6 +1373,8 @@ pub enum WasmOutputFormat {
     Json,
     /// SARIF format for security results
     Sarif,
+    /// Toon format
+    Toon,
 }
 
 impl fmt::Display for WasmOutputFormat {
@@ -1274,6 +1384,7 @@ impl fmt::Display for WasmOutputFormat {
             WasmOutputFormat::Detailed => write!(f, "detailed"),
             WasmOutputFormat::Json => write!(f, "json"),
             WasmOutputFormat::Sarif => write!(f, "sarif"),
+            WasmOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }
@@ -1332,6 +1443,8 @@ pub enum DeepWasmOutputFormat {
     Json,
     /// HTML report
     Html,
+    /// Toon format
+    Toon,
 }
 
 impl fmt::Display for DeepWasmOutputFormat {
@@ -1340,6 +1453,7 @@ impl fmt::Display for DeepWasmOutputFormat {
             DeepWasmOutputFormat::Markdown => write!(f, "markdown"),
             DeepWasmOutputFormat::Json => write!(f, "json"),
             DeepWasmOutputFormat::Html => write!(f, "html"),
+            DeepWasmOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }

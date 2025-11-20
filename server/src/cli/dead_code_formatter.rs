@@ -131,6 +131,15 @@ impl DeadCodeFormatter for JsonFormatter {
     }
 }
 
+/// TOON formatter for LLM-optimized output
+pub struct ToonFormatter;
+
+impl DeadCodeFormatter for ToonFormatter {
+    fn format(&self, result: &DeadCodeResult) -> Result<String> {
+        crate::cli::formatting_helpers::to_toon(result)
+    }
+}
+
 /// Markdown formatter for documentation
 pub struct MarkdownFormatter;
 
@@ -304,6 +313,7 @@ impl DeadCodeFormatterFactory {
             crate::cli::DeadCodeOutputFormat::Json => Box::new(JsonFormatter),
             crate::cli::DeadCodeOutputFormat::Markdown => Box::new(MarkdownFormatter),
             crate::cli::DeadCodeOutputFormat::Sarif => Box::new(GccFormatter), // Use GCC formatter for SARIF temporarily
+            crate::cli::DeadCodeOutputFormat::Toon => Box::new(ToonFormatter),
         }
     }
 }

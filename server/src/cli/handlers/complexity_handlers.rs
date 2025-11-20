@@ -261,6 +261,15 @@ async fn format_and_write_output(
             serde_json::to_string_pretty(&json_output)
                 .map_err(|e| anyhow::anyhow!("JSON serialization failed: {e}"))
         }
+        ComplexityOutputFormat::Toon => {
+            let toon_output = serde_json::json!({
+                "summary": summary,
+                "files": file_metrics,
+                "top_files_limit": if top_files > 0 { Some(top_files) } else { None },
+            });
+            crate::cli::formatting_helpers::to_toon(&toon_output)
+                .map_err(|e| anyhow::anyhow!("TOON serialization failed: {e}"))
+        }
     }?;
 
     if let Some(output_path) = output {
@@ -1186,6 +1195,7 @@ async fn format_and_write_churn_output(
             super::super::analysis_utilities::format_churn_as_markdown(&analysis)?
         }
         ChurnOutputFormat::Csv => super::super::analysis_utilities::format_churn_as_csv(&analysis)?,
+        ChurnOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(&analysis)?,
     };
 
     super::super::analysis_utilities::write_churn_output(content, output).await
@@ -1362,6 +1372,7 @@ fn format_dead_code_result(
         DeadCodeOutputFormat::Sarif => format_dead_code_as_sarif(result),
         DeadCodeOutputFormat::Summary => format_dead_code_as_summary(result),
         DeadCodeOutputFormat::Markdown => format_dead_code_as_markdown(result),
+        DeadCodeOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(result),
     }
 }
 
@@ -1792,6 +1803,7 @@ fn format_satd_output(
         }
         SatdOutputFormat::Summary => Ok(format_satd_summary(result, metrics)),
         SatdOutputFormat::Markdown => Ok(format_satd_markdown(result, metrics, evolution, days)),
+        SatdOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(&result),
     }
 }
 

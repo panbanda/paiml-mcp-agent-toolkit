@@ -162,6 +162,13 @@ fn format_defect_output(
         }
         DefectPredictionOutputFormat::Sarif => format_defect_sarif(predictions),
         DefectPredictionOutputFormat::Csv => format_defect_csv(predictions),
+        DefectPredictionOutputFormat::Toon => {
+            let data = serde_json::json!({
+                "predictions": predictions,
+                "elapsed_secs": elapsed.as_secs_f64(),
+            });
+            Ok(crate::cli::formatting_helpers::to_toon(&data)?)
+        }
     }
 }
 

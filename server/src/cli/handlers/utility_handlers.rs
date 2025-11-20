@@ -34,6 +34,11 @@ pub async fn handle_list(
                 templates.iter().map(std::convert::AsRef::as_ref).collect();
             println!("{}", serde_yaml::to_string(&templates_deref)?);
         }
+        OutputFormat::Toon => {
+            let templates_deref: Vec<&TemplateResource> =
+                templates.iter().map(std::convert::AsRef::as_ref).collect();
+            println!("{}", crate::cli::formatting_helpers::to_toon(&templates_deref)?);
+        }
     }
     Ok(())
 }
@@ -793,6 +798,13 @@ fn format_context_output_simple(
         }
         ContextFormat::Json => simple_json_format(project_context, detected_toolchain)?,
         ContextFormat::Sarif => simple_sarif_format(project_context, detected_toolchain)?,
+        ContextFormat::Toon => {
+            let data = serde_json::json!({
+                "project_context": project_context,
+                "detected_toolchain": detected_toolchain,
+            });
+            crate::cli::formatting_helpers::to_toon(&data)?
+        }
     };
 
     Ok(output)
@@ -991,6 +1003,14 @@ fn format_context_output(
             detected_toolchain,
             project_path,
         )),
+        ContextFormat::Toon => {
+            let data = serde_json::json!({
+                "project_context": project_context,
+                "deep_context": deep_context,
+                "detected_toolchain": detected_toolchain,
+            });
+            crate::cli::formatting_helpers::to_toon(&data)
+        }
     }
 }
 
@@ -2106,6 +2126,13 @@ fn generate_graph_section(
             // For other formats, add minimal graph info
             content.push_str(&format!(
                 "Graph analysis: {} files analyzed",
+                annotations.len()
+            ));
+        }
+        ContextFormat::Toon => {
+            // For Toon format, we would format as a cartoon-style visualization
+            content.push_str(&format!(
+                "Graph analysis (Toon): {} files analyzed",
                 annotations.len()
             ));
         }

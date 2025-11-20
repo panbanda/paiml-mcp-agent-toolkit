@@ -747,6 +747,7 @@ fn format_output(
         RefactorDocsOutputFormat::Detailed => format_detailed(result, dry_run, perf, elapsed),
         RefactorDocsOutputFormat::Json => format_json(result),
         RefactorDocsOutputFormat::Interactive => format_summary(result, dry_run, perf, elapsed),
+        RefactorDocsOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(result),
     }
 }
 

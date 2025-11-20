@@ -619,6 +619,7 @@ fn format_output_from_summary(
         TdgOutputFormat::Json => Ok(format_json_output(summary, include_components)),
         TdgOutputFormat::Markdown => Ok(format_markdown_output(summary, include_components)),
         TdgOutputFormat::Sarif => Ok(format_sarif_output(summary)),
+        TdgOutputFormat::Toon => Ok(crate::cli::formatting_helpers::to_toon(summary)?),
     }
 }
 
@@ -661,6 +662,12 @@ fn format_empty_results(format: TdgOutputFormat) -> String {
         TdgOutputFormat::Json => r#"{"summary": {"total_files": 0}, "hotspots": []}"#.to_string(),
         TdgOutputFormat::Markdown => "# Technical Debt Gradient Analysis\n\nNo files found matching the specified criteria.\n".to_string(),
         TdgOutputFormat::Sarif => r#"{"version": "2.1.0", "runs": [{"tool": {"driver": {"name": "pmat-tdg"}}, "results": []}]}"#.to_string(),
+        TdgOutputFormat::Toon => {
+            use serde_json::json;
+            let empty_summary = json!({"summary": {"total_files": 0}, "hotspots": []});
+            crate::cli::formatting_helpers::to_toon(&empty_summary)
+                .unwrap_or_else(|_| r#"{"summary": {"total_files": 0}, "hotspots": []}"#.to_string())
+        }
     }
 }
 
@@ -1051,6 +1058,15 @@ fn format_makefile_output(
         }
         MakefileOutputFormat::Sarif => format_makefile_as_sarif(path, filtered_violations),
         MakefileOutputFormat::Gcc => format_makefile_as_gcc(path, filtered_violations),
+        MakefileOutputFormat::Toon => {
+            let data = serde_json::json!({
+                "path": path.display().to_string(),
+                "violations": filtered_violations,
+                "quality_score": lint_result.quality_score,
+                "gnu_version": gnu_version,
+            });
+            Ok(crate::cli::formatting_helpers::to_toon(&data)?)
+        }
     }
 }
 
@@ -1395,6 +1411,14 @@ fn format_provability_output(
             format_provability_detailed(function_ids, summaries, include_evidence)
         }
         ProvabilityOutputFormat::Sarif => format_provability_sarif(function_ids, summaries),
+        ProvabilityOutputFormat::Toon => {
+            let data = serde_json::json!({
+                "function_ids": function_ids,
+                "summaries": summaries,
+                "include_evidence": include_evidence,
+            });
+            Ok(crate::cli::formatting_helpers::to_toon(&data)?)
+        }
     }
 }
 
@@ -1573,13 +1597,14 @@ fn format_defect_report(
     report: &DefectPredictionReport,
     format: DefectPredictionOutputFormat,
 ) -> Result<String> {
-    use DefectPredictionOutputFormat::{Csv, Detailed, Json, Sarif, Summary};
+    use DefectPredictionOutputFormat::{Csv, Detailed, Json, Sarif, Summary, Toon};
     match format {
         Summary => format_defect_summary(report, 10),
         Json => serde_json::to_string_pretty(report).map_err(Into::into),
         Detailed => format_defect_full(report, 10),
         Sarif => format_defect_sarif(report),
         Csv => format_defect_csv(report),
+        Toon => Ok(crate::cli::formatting_helpers::to_toon(report)?),
     }
 }
 
@@ -1758,6 +1783,13 @@ pub async fn handle_analyze_proof_annotations(
             format_as_markdown(&annotations, &project_path, include_evidence)?
         }
         ProofAnnotationOutputFormat::Sarif => format_as_sarif(&annotations, &project_path)?,
+        ProofAnnotationOutputFormat::Toon => {
+            let data = serde_json::json!({
+                "annotations": annotations,
+                "elapsed_secs": elapsed.as_secs_f64(),
+            });
+            crate::cli::formatting_helpers::to_toon(&data)?
+        }
     };
 
     // Write output
@@ -1987,7 +2019,7 @@ fn format_coverage_report(
     format: IncrementalCoverageOutputFormat,
     top_files: usize,
 ) -> Result<String> {
-    use IncrementalCoverageOutputFormat::{Delta, Detailed, Json, Lcov, Markdown, Sarif, Summary};
+    use IncrementalCoverageOutputFormat::{Delta, Detailed, Json, Lcov, Markdown, Sarif, Summary, Toon};
     match format {
         Summary => format_incremental_coverage_summary(report, top_files),
         Detailed => format_incremental_coverage_detailed(report, top_files),
@@ -1996,6 +2028,7 @@ fn format_coverage_report(
         Lcov => format_incremental_coverage_lcov(report),
         Delta => format_incremental_coverage_delta(report, top_files),
         Sarif => format_incremental_coverage_sarif(report),
+        Toon => Ok(crate::cli::formatting_helpers::to_toon(report)?),
     }
 }
 
@@ -2478,6 +2511,7 @@ fn format_churn_content(
         ChurnOutputFormat::Summary => format_churn_as_summary(analysis),
         ChurnOutputFormat::Markdown => format_churn_as_markdown(analysis),
         ChurnOutputFormat::Csv => format_churn_as_csv(analysis),
+        ChurnOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(analysis),
     }
 }
 
@@ -2765,6 +2799,16 @@ fn generate_satd_output(
         SatdOutputFormat::Json => format_satd_json(filtered_items, metrics, evolution),
         SatdOutputFormat::Sarif => format_satd_sarif(filtered_items),
         SatdOutputFormat::Markdown => format_satd_markdown(filtered_items, evolution, days),
+        SatdOutputFormat::Toon => {
+            let data = serde_json::json!({
+                "items": filtered_items,
+                "metrics_enabled": metrics,
+                "evolution_enabled": evolution,
+                "days": days,
+            });
+            crate::cli::formatting_helpers::to_toon(&data)
+                .unwrap_or_else(|e| format!("Error formatting TOON: {}", e))
+        }
     }
 }
 
@@ -3287,6 +3331,15 @@ fn format_single_file_output(
         | QualityGateOutputFormat::Human
         | QualityGateOutputFormat::Junit => {
             Ok(format_single_file_summary(single_file, results, violations))
+        }
+        QualityGateOutputFormat::Toon => {
+            let data = json!({
+                "file": single_file,
+                "passed": results.passed,
+                "results": results,
+                "violations": violations,
+            });
+            Ok(crate::cli::formatting_helpers::to_toon(&data)?)
         }
     }
 }
@@ -5465,6 +5518,13 @@ pub fn format_quality_gate_output(
         QualityGateOutputFormat::Summary => format_qg_as_summary(results),
         QualityGateOutputFormat::Detailed => format_qg_as_detailed(results, violations),
         QualityGateOutputFormat::Markdown => format_qg_as_markdown(results),
+        QualityGateOutputFormat::Toon => {
+            let data = serde_json::json!({
+                "results": results,
+                "violations": violations,
+            });
+            Ok(crate::cli::formatting_helpers::to_toon(&data)?)
+        }
     }
 }
 

@@ -5185,6 +5185,7 @@ dependencies = [
  "semver",
  "serde",
  "serde_json",
+ "serde_toon2",
  "serde_yaml",
  "serial_test",
  "sha2",
@@ -6618,6 +6619,16 @@ version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "40734c41988f7306bb04f0ecf60ec0f3f1caa34290e4e8ea471dcd3346483b83"
 dependencies = [
+ "serde",
+]
+
+[[package]]
+name = "serde_toon2"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5acb63d5daa1bec7ca5179eba361264259c174ac98a6b996084496f748ce25e4"
+dependencies = [
+ "indexmap 2.11.1",
  "serde",
 ]
 

@@ -195,6 +195,9 @@ fn format_and_print_output(
         crate::cli::OutputFormat::Table => {
             println!("{response:#?}");
         }
+        crate::cli::OutputFormat::Toon => {
+            println!("{}", crate::cli::formatting_helpers::to_toon(response)?);
+        }
     }
     Ok(())
 }

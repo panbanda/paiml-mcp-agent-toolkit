@@ -236,6 +236,16 @@ fn format_results(
             verbose,
         ),
         WasmOutputFormat::Sarif => format_sarif(security.unwrap_or(&Vec::new())),
+        WasmOutputFormat::Toon => {
+            let data = serde_json::json!({
+                "analysis": analysis,
+                "verification": verification,
+                "security": security,
+                "profiling": profiling,
+                "baseline": baseline,
+            });
+            crate::cli::formatting_helpers::to_toon(&data)
+        }
     }
 }
 

@@ -194,9 +194,14 @@ pub async fn handle_generate_report(
     let service = DefectReportService::new();
     let report = service.generate_report(&project_path).await?;
 
-    let service_format = convert_to_service_format(actual_format);
-    let formatted_output = format_report_output(&service, &report, service_format)?;
+    let formatted_output = if matches!(actual_format, ReportOutputFormat::Toon) {
+        crate::cli::formatting_helpers::to_toon(&report)?
+    } else {
+        let service_format = convert_to_service_format(actual_format.clone());
+        format_report_output(&service, &report, service_format)?
+    };
 
+    let service_format = convert_to_service_format(actual_format);
     write_report_output(formatted_output, output, service_format).await?;
 
     let elapsed = start_time.elapsed();
@@ -241,6 +246,7 @@ fn convert_to_service_format(actual_format: ReportOutputFormat) -> ReportFormat 
         ReportOutputFormat::Html => ReportFormat::Markdown,
         ReportOutputFormat::Pdf => ReportFormat::Markdown,
         ReportOutputFormat::Dashboard => ReportFormat::Json,
+        ReportOutputFormat::Toon => ReportFormat::Json, // Toon uses JSON base
     }
 }
 

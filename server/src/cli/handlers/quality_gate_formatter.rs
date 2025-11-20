@@ -43,6 +43,15 @@ pub fn format_single_file_output(
         | QualityGateOutputFormat::Junit => {
             Ok(format_single_file_summary(single_file, results, violations))
         }
+        QualityGateOutputFormat::Toon => {
+            let data = json!({
+                "file": single_file,
+                "passed": results.passed,
+                "results": results,
+                "violations": violations,
+            });
+            crate::cli::formatting_helpers::to_toon(&data)
+        }
     }
 }
 
@@ -399,6 +408,14 @@ pub fn format_project_output(
         | QualityGateOutputFormat::Detailed
         | QualityGateOutputFormat::Human => Ok(format_project_summary(results, violations)),
         QualityGateOutputFormat::Junit => format_qg_as_junit(violations),
+        QualityGateOutputFormat::Toon => {
+            let data = json!({
+                "passed": results.passed,
+                "results": results,
+                "violations": violations,
+            });
+            crate::cli::formatting_helpers::to_toon(&data)
+        }
     }
 }
 

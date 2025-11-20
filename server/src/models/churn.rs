@@ -82,6 +82,7 @@ pub enum ChurnOutputFormat {
     Markdown,
     Csv,
     Summary,
+    Toon,
 }
 
 impl std::str::FromStr for ChurnOutputFormat {
@@ -93,7 +94,20 @@ impl std::str::FromStr for ChurnOutputFormat {
             "markdown" => Ok(ChurnOutputFormat::Markdown),
             "csv" => Ok(ChurnOutputFormat::Csv),
             "summary" => Ok(ChurnOutputFormat::Summary),
+            "toon" => Ok(ChurnOutputFormat::Toon),
             _ => Err(format!("Invalid output format: {s}")),
+        }
+    }
+}
+
+impl std::fmt::Display for ChurnOutputFormat {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ChurnOutputFormat::Json => write!(f, "json"),
+            ChurnOutputFormat::Markdown => write!(f, "markdown"),
+            ChurnOutputFormat::Csv => write!(f, "csv"),
+            ChurnOutputFormat::Summary => write!(f, "summary"),
+            ChurnOutputFormat::Toon => write!(f, "toon"),
         }
     }
 }

@@ -966,6 +966,7 @@ fn format_output(
         LintHotspotOutputFormat::Json => format_json(result, false),
         LintHotspotOutputFormat::EnforcementJson => format_json(result, true),
         LintHotspotOutputFormat::Sarif => format_sarif(result),
+        LintHotspotOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(result),
     }
 }
 

@@ -155,6 +155,7 @@ mod tests {
                 NameSimilarityOutputFormat::Summary => {}
                 NameSimilarityOutputFormat::Markdown => {}
                 NameSimilarityOutputFormat::Human => {}
+                NameSimilarityOutputFormat::Toon => {}
             }
         }
     }

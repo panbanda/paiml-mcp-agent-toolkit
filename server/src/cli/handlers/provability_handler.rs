@@ -123,6 +123,13 @@ fn format_provability_output(
         ProvabilityOutputFormat::Markdown => {
             format_provability_detailed(function_ids, summaries, config.include_evidence)
         }
+        ProvabilityOutputFormat::Toon => {
+            let data = serde_json::json!({
+                "function_ids": function_ids,
+                "summaries": summaries,
+            });
+            crate::cli::formatting_helpers::to_toon(&data)
+        }
     }
 }
 

@@ -73,7 +73,7 @@ pub struct LightweightProvabilityAnalyzer {
     current_version: u64,
 }
 
-#[derive(Clone, Debug, Hash, Eq, PartialEq)]
+#[derive(Clone, Debug, Hash, Eq, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct FunctionId {
     pub file_path: String,
     pub function_name: String,

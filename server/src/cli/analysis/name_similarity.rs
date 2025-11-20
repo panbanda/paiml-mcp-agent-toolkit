@@ -348,6 +348,7 @@ pub fn format_output(
         | crate::cli::NameSimilarityOutputFormat::Detailed => format_human_output(&result),
         crate::cli::NameSimilarityOutputFormat::Csv => format_csv_output(&result),
         crate::cli::NameSimilarityOutputFormat::Markdown => format_markdown_output(&result),
+        crate::cli::NameSimilarityOutputFormat::Toon => Ok(crate::cli::formatting_helpers::to_toon(&result)?),
     }
 }
 

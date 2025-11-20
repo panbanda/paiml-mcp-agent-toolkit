@@ -24,6 +24,27 @@ use serde_json;
 use std::path::{Path, PathBuf};
 use walkdir::WalkDir;
 
+/// Serde helper for Duration serialization
+mod duration_serde {
+    use serde::{Deserialize, Deserializer, Serialize, Serializer};
+    use std::time::Duration;
+
+    pub fn serialize<S>(duration: &Duration, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        duration.as_secs_f64().serialize(serializer)
+    }
+
+    pub fn deserialize<'de, D>(deserializer: D) -> Result<Duration, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let secs = f64::deserialize(deserializer)?;
+        Ok(Duration::from_secs_f64(secs))
+    }
+}
+
 /// Configuration for refactor auto command
 #[derive(Debug, Clone)]
 pub struct RefactorAutoConfig {
@@ -816,7 +837,7 @@ struct UncoveredLine {
 }
 
 /// Individual refactoring request
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 struct RefactoringRequest {
     request_type: RefactoringType,
     target_file: PathBuf,
@@ -827,7 +848,7 @@ struct RefactoringRequest {
 }
 
 /// Types of refactoring requests
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 enum RefactoringType {
     ComplexityReduction,
     LintFix,
@@ -837,7 +858,7 @@ enum RefactoringType {
 }
 
 /// Refactoring priority levels
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 enum RefactoringPriority {
     Critical,
     High,
@@ -846,7 +867,7 @@ enum RefactoringPriority {
 }
 
 /// Refactoring effort estimation
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 enum RefactoringEffort {
     Trivial,   // < 30 minutes
     Minor,     // 30 minutes - 2 hours
@@ -1293,26 +1314,28 @@ async fn apply_security_fixes(_file: &Path, _instructions: &str) -> Result<Vec<S
 }
 
 /// Result of a refactoring iteration
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 struct IterationResult {
     iteration_number: u32,
     successful_requests: Vec<RefactoringSuccess>,
     failed_requests: Vec<RefactoringFailure>,
+    #[serde(with = "duration_serde")]
     iteration_duration: std::time::Duration,
     quality_improvement: QualityImprovement,
 }
 
 /// Successful refactoring application
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 struct RefactoringSuccess {
     request: RefactoringRequest,
     changes_made: Vec<String>,
+    #[serde(with = "duration_serde")]
     application_duration: std::time::Duration,
     verification_status: VerificationStatus,
 }
 
 /// Failed refactoring application
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 struct RefactoringFailure {
     request: RefactoringRequest,
     error_message: String,
@@ -1320,7 +1343,7 @@ struct RefactoringFailure {
 }
 
 /// Verification status for refactoring
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 enum VerificationStatus {
     Pending,
     Verified,
@@ -1328,7 +1351,7 @@ enum VerificationStatus {
 }
 
 /// Result of validation checks
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 struct ValidationResult {
     overall_success: bool,
     compilation_passed: bool,
@@ -1338,7 +1361,7 @@ struct ValidationResult {
 }
 
 /// Quality improvement metrics
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 struct QualityImprovement {
     complexity_reduced: u32,
     violations_fixed: u32,
@@ -1348,7 +1371,7 @@ struct QualityImprovement {
 }
 
 /// Compilation validation result
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 struct CompilationResult {
     success: bool,
     error_message: String,
@@ -1356,7 +1379,7 @@ struct CompilationResult {
 }
 
 /// Test execution result
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 struct TestResult {
     success: bool,
     passed_count: u32,
@@ -1384,6 +1407,14 @@ async fn format_and_output_results(
         }
         RefactorAutoOutputFormat::Summary => {
             output_text_results(iteration_results, final_validation, context).await?;
+        }
+        RefactorAutoOutputFormat::Toon => {
+            let data = serde_json::json!({
+                "iteration_results": iteration_results,
+                "final_validation": final_validation,
+            });
+            let toon_output = crate::cli::formatting_helpers::to_toon(&data)?;
+            println!("{}", toon_output);
         }
     }
 
@@ -1735,6 +1766,10 @@ async fn handle_markdown_analysis(
         RefactorAutoOutputFormat::Json => {
             println!("{}", serde_json::to_string_pretty(&refactor_request)?);
         }
+        RefactorAutoOutputFormat::Toon => {
+            let toon_output = crate::cli::formatting_helpers::to_toon(&refactor_request)?;
+            println!("{}", toon_output);
+        }
         _ => {
             eprintln!("📝 Markdown refactor request created");
         }
@@ -1875,6 +1910,11 @@ fn output_regular_file_results(
         }
         RefactorAutoOutputFormat::Detailed => {
             print_single_file_detailed(refactor_request);
+        }
+        RefactorAutoOutputFormat::Toon => {
+            if let Ok(toon_str) = crate::cli::formatting_helpers::to_toon(refactor_request) {
+                println!("{toon_str}");
+            }
         }
     }
 }

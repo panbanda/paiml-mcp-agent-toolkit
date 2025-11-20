@@ -257,6 +257,7 @@ fn format_result(
         ComprehensiveOutputFormat::Sarif => format_as_sarif(&result),
         ComprehensiveOutputFormat::Summary => format_as_markdown(&result, true), // Summary is markdown format
         ComprehensiveOutputFormat::Detailed => format_as_markdown(&result, false), // Detailed is markdown without exec summary
+        ComprehensiveOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(&result),
     }
 }
 

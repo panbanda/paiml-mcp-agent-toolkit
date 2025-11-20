@@ -105,6 +105,7 @@ fn format_result(
         }
         DefectPredictionOutputFormat::Csv => Ok(format_csv(&result)),
         DefectPredictionOutputFormat::Sarif => Ok(format_sarif(&result)),
+        DefectPredictionOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(&result),
     }
 }
 

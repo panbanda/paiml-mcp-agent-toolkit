@@ -148,6 +148,7 @@ pub async fn handle_analyze_deep_context(
             // TRACKED: Implement SARIF format
             analyzer.format_as_json(&report)?
         }
+        DeepContextOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(&report)?,
     };
 
     // Write output

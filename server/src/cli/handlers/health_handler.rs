@@ -413,6 +413,10 @@ fn print_health_report(report: &HealthReport, format: &OutputFormat) -> Result<(
         OutputFormat::Table => {
             print_health_table(report);
         }
+        OutputFormat::Toon => {
+            let output = crate::cli::formatting_helpers::to_toon(report)?;
+            println!("{output}");
+        }
     }
     Ok(())
 }

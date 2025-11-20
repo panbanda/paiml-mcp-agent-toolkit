@@ -200,6 +200,7 @@ fn format_report(
         crate::cli::DuplicateOutputFormat::Detailed => format_detailed_report(report),
         crate::cli::DuplicateOutputFormat::Csv => format_csv_report(report),
         crate::cli::DuplicateOutputFormat::Sarif => format_sarif_report(report),
+        crate::cli::DuplicateOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(report),
     }
 }
 

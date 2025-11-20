@@ -729,6 +729,7 @@ fn format_churn_output(
         ChurnOutputFormat::Markdown => format_churn_as_markdown(analysis),
         ChurnOutputFormat::Csv => format_churn_as_csv(analysis),
         ChurnOutputFormat::Summary => format_churn_summary(analysis),
+        ChurnOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(&analysis).unwrap_or_default(),
     }
 }
 
@@ -2291,6 +2292,7 @@ fn format_dead_code_output(
         DeadCodeOutputFormat::Json => Ok(serde_json::to_string_pretty(result)?),
         DeadCodeOutputFormat::Sarif => format_dead_code_as_sarif_mcp(result),
         DeadCodeOutputFormat::Markdown => format_dead_code_as_markdown_mcp(result),
+        DeadCodeOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(result),
     }
 }
 

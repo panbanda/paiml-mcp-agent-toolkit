@@ -203,6 +203,7 @@ fn generate_output_content(
         }
         DeepWasmOutputFormat::Json => Ok(serde_json::to_string_pretty(report)?),
         DeepWasmOutputFormat::Html => Err(anyhow::anyhow!("HTML output not yet implemented")),
+        DeepWasmOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(report),
     }
 }
 

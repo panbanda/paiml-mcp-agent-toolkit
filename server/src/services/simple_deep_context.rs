@@ -10,6 +10,27 @@ use std::{
 };
 use tracing::info;
 
+/// Serde helper for Duration serialization
+mod duration_serde {
+    use serde::{Deserialize, Deserializer, Serialize, Serializer};
+    use std::time::Duration;
+
+    pub fn serialize<S>(duration: &Duration, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        duration.as_secs_f64().serialize(serializer)
+    }
+
+    pub fn deserialize<'de, D>(deserializer: D) -> Result<Duration, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let secs = f64::deserialize(deserializer)?;
+        Ok(Duration::from_secs_f64(secs))
+    }
+}
+
 /// Simplified deep context analysis service
 pub struct SimpleDeepContext;
 
@@ -24,23 +45,24 @@ pub struct SimpleAnalysisConfig {
 }
 
 /// Analysis report
-#[derive(Debug)]
+#[derive(Debug, serde::Serialize, serde::Deserialize)]
 pub struct SimpleAnalysisReport {
     pub file_count: usize,
+    #[serde(with = "duration_serde")]
     pub analysis_duration: std::time::Duration,
     pub complexity_metrics: ComplexityMetrics,
     pub recommendations: Vec<String>,
     pub file_complexity_details: Vec<FileComplexityDetail>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, serde::Serialize, serde::Deserialize)]
 pub struct ComplexityMetrics {
     pub total_functions: usize,
     pub high_complexity_count: usize,
     pub avg_complexity: f64,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct FileComplexityDetail {
     pub file_path: PathBuf,
     pub function_count: usize,

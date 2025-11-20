@@ -159,6 +159,7 @@ fn show_prompt(
         PromptOutputFormat::Yaml => prompt.to_yaml()?,
         PromptOutputFormat::Json => prompt.to_json()?,
         PromptOutputFormat::Text => prompt.to_text(&variables),
+        PromptOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(&prompt)?,
     };
 
     // Write to file or stdout

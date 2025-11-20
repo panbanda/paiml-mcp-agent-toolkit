@@ -1288,6 +1288,7 @@ fn format_entropy_report(
         EntropyOutputFormat::Detailed => Ok(report.format_report()),
         EntropyOutputFormat::Json => Ok(serde_json::to_string_pretty(&report)?),
         EntropyOutputFormat::Markdown => Ok(format_markdown_report(report, top_violations)),
+        EntropyOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(&report),
     }
 }
 

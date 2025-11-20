@@ -198,6 +198,7 @@ fn format_output(
         SatdOutputFormat::Json => format_json(result, metrics, evolution),
         SatdOutputFormat::Sarif => format_sarif(result),
         SatdOutputFormat::Markdown => format_markdown(result, evolution, days),
+        SatdOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(result).unwrap_or_else(|e| format!("Error formatting Toon: {}", e)),
     }
 }
 

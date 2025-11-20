@@ -85,6 +85,13 @@ fn format_proof_annotations(
             format_as_markdown(annotations, project_path, include_evidence)
         }
         ProofAnnotationOutputFormat::Sarif => format_as_sarif(annotations, project_path),
+        ProofAnnotationOutputFormat::Toon => {
+            let data = serde_json::json!({
+                "annotations": annotations,
+                "elapsed_secs": elapsed.as_secs_f64(),
+            });
+            crate::cli::formatting_helpers::to_toon(&data)
+        }
     }
 }
 

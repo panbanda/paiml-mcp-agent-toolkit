@@ -1534,6 +1534,7 @@ impl CliAdapter {
             OutputFormat::Json => "json",
             OutputFormat::Table => "table",
             OutputFormat::Yaml => "yaml",
+            OutputFormat::Toon => "toon",
         }
     }
 }
@@ -2000,6 +2001,7 @@ fn format_to_string(format: &ContextFormat) -> String {
         ContextFormat::Json => "json".to_string(),
         ContextFormat::Sarif => "sarif".to_string(),
         ContextFormat::LlmOptimized => "llm-optimized".to_string(),
+        ContextFormat::Toon => "toon".to_string(),
     }
 }
 
@@ -2009,6 +2011,7 @@ fn churn_format_to_string(format: &ChurnOutputFormat) -> String {
         ChurnOutputFormat::Markdown => "markdown".to_string(),
         ChurnOutputFormat::Json => "json".to_string(),
         ChurnOutputFormat::Csv => "csv".to_string(),
+        ChurnOutputFormat::Toon => "toon".to_string(),
     }
 }
 
@@ -2017,6 +2020,7 @@ fn complexity_format_to_string(format: &ComplexityOutputFormat) -> String {
         ComplexityOutputFormat::Summary => "summary".to_string(),
         ComplexityOutputFormat::Full => "full".to_string(),
         ComplexityOutputFormat::Json => "json".to_string(),
+        ComplexityOutputFormat::Toon => "toon".to_string(),
         ComplexityOutputFormat::Sarif => "sarif".to_string(),
     }
 }
@@ -2036,6 +2040,7 @@ fn dead_code_format_to_string(format: &crate::cli::DeadCodeOutputFormat) -> Stri
         crate::cli::DeadCodeOutputFormat::Json => "json".to_string(),
         crate::cli::DeadCodeOutputFormat::Sarif => "sarif".to_string(),
         crate::cli::DeadCodeOutputFormat::Markdown => "markdown".to_string(),
+        crate::cli::DeadCodeOutputFormat::Toon => "toon".to_string(),
     }
 }
 
@@ -2045,6 +2050,7 @@ fn satd_format_to_string(format: &crate::cli::SatdOutputFormat) -> String {
         crate::cli::SatdOutputFormat::Json => "json".to_string(),
         crate::cli::SatdOutputFormat::Sarif => "sarif".to_string(),
         crate::cli::SatdOutputFormat::Markdown => "markdown".to_string(),
+        crate::cli::SatdOutputFormat::Toon => "toon".to_string(),
     }
 }
 
@@ -2078,6 +2084,7 @@ fn graph_metrics_format_to_string(format: &crate::cli::GraphMetricsOutputFormat)
         crate::cli::GraphMetricsOutputFormat::Csv => "csv".to_string(),
         crate::cli::GraphMetricsOutputFormat::GraphML => "graphml".to_string(),
         crate::cli::GraphMetricsOutputFormat::Markdown => "markdown".to_string(),
+        crate::cli::GraphMetricsOutputFormat::Toon => "toon".to_string(),
     }
 }
 
@@ -2089,6 +2096,7 @@ fn name_similarity_format_to_string(format: &crate::cli::NameSimilarityOutputFor
         crate::cli::NameSimilarityOutputFormat::Json => "json".to_string(),
         crate::cli::NameSimilarityOutputFormat::Csv => "csv".to_string(),
         crate::cli::NameSimilarityOutputFormat::Markdown => "markdown".to_string(),
+        crate::cli::NameSimilarityOutputFormat::Toon => "toon".to_string(),
     }
 }
 
@@ -2126,6 +2134,7 @@ fn proof_annotation_format_to_string(format: &crate::cli::ProofAnnotationOutputF
         crate::cli::ProofAnnotationOutputFormat::Json => "json".to_string(),
         crate::cli::ProofAnnotationOutputFormat::Markdown => "markdown".to_string(),
         crate::cli::ProofAnnotationOutputFormat::Sarif => "sarif".to_string(),
+        crate::cli::ProofAnnotationOutputFormat::Toon => "toon".to_string(),
     }
 }
 
@@ -2140,6 +2149,7 @@ fn incremental_coverage_format_to_string(
         crate::cli::IncrementalCoverageOutputFormat::Lcov => "lcov".to_string(),
         crate::cli::IncrementalCoverageOutputFormat::Delta => "delta".to_string(),
         crate::cli::IncrementalCoverageOutputFormat::Sarif => "sarif".to_string(),
+        crate::cli::IncrementalCoverageOutputFormat::Toon => "toon".to_string(),
     }
 }
 
@@ -2161,6 +2171,7 @@ fn symbol_table_format_to_string(format: &crate::cli::SymbolTableOutputFormat) -
         crate::cli::SymbolTableOutputFormat::Human => "human".to_string(),
         crate::cli::SymbolTableOutputFormat::Json => "json".to_string(),
         crate::cli::SymbolTableOutputFormat::Csv => "csv".to_string(),
+        crate::cli::SymbolTableOutputFormat::Toon => "toon".to_string(),
     }
 }
 
@@ -2170,6 +2181,7 @@ fn big_o_format_to_string(format: &crate::cli::BigOOutputFormat) -> String {
         crate::cli::BigOOutputFormat::Json => "json".to_string(),
         crate::cli::BigOOutputFormat::Markdown => "markdown".to_string(),
         crate::cli::BigOOutputFormat::Detailed => "detailed".to_string(),
+        crate::cli::BigOOutputFormat::Toon => "toon".to_string(),
     }
 }
 
@@ -2219,6 +2231,7 @@ fn deep_context_format_to_string(format: &crate::cli::DeepContextOutputFormat) -
         crate::cli::DeepContextOutputFormat::Markdown => "markdown".to_string(),
         crate::cli::DeepContextOutputFormat::Json => "json".to_string(),
         crate::cli::DeepContextOutputFormat::Sarif => "sarif".to_string(),
+        crate::cli::DeepContextOutputFormat::Toon => "toon".to_string(),
     }
 }
 
@@ -2247,6 +2260,7 @@ fn tdg_format_to_string(format: &crate::cli::TdgOutputFormat) -> String {
         crate::cli::TdgOutputFormat::Json => "json".to_string(),
         crate::cli::TdgOutputFormat::Markdown => "markdown".to_string(),
         crate::cli::TdgOutputFormat::Sarif => "sarif".to_string(),
+        crate::cli::TdgOutputFormat::Toon => "toon".to_string(),
     }
 }
 
@@ -2257,6 +2271,7 @@ fn provability_format_to_string(format: &crate::cli::ProvabilityOutputFormat) ->
         crate::cli::ProvabilityOutputFormat::Json => "json".to_string(),
         crate::cli::ProvabilityOutputFormat::Sarif => "sarif".to_string(),
         crate::cli::ProvabilityOutputFormat::Markdown => "markdown".to_string(),
+        crate::cli::ProvabilityOutputFormat::Toon => "toon".to_string(),
     }
 }
 

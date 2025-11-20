@@ -180,6 +180,37 @@ pub fn format_recommendations(context: &DeepContext) -> String {
     output
 }
 
+/// Convert any serializable data structure to TOON format
+///
+/// # Arguments
+/// * `data` - Any type implementing Serialize
+///
+/// # Returns
+/// * `Result<String>` - TOON-formatted string or error
+///
+/// # Examples
+/// ```
+/// use pmat::cli::formatting_helpers::to_toon;
+/// use serde::Serialize;
+///
+/// #[derive(Serialize)]
+/// struct Example {
+///     name: String,
+///     value: i32,
+/// }
+///
+/// let data = Example {
+///     name: "test".to_string(),
+///     value: 42,
+/// };
+/// let toon_output = to_toon(&data).unwrap();
+/// ```
+pub fn to_toon<T: serde::Serialize>(data: &T) -> anyhow::Result<String> {
+    // Serialize to TOON format using serde_toon2
+    serde_toon2::to_string(data)
+        .map_err(|e| anyhow::anyhow!("TOON encoding failed: {}", e))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

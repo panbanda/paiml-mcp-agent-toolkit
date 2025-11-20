@@ -294,17 +294,23 @@ fn format_report(
     filtered_defects: Vec<crate::models::defect_report::Defect>,
     config: &ComprehensiveConfig,
 ) -> Result<String> {
+    // Create a modified report with filtered defects
+    let mut filtered_report = report.clone();
+    filtered_report.defects = filtered_defects;
+
+    // Handle Toon format early
+    if matches!(config.format, ComprehensiveOutputFormat::Toon) {
+        return crate::cli::formatting_helpers::to_toon(&filtered_report);
+    }
+
     let format = match config.format {
         ComprehensiveOutputFormat::Json => ReportFormat::Json,
         ComprehensiveOutputFormat::Summary => ReportFormat::Markdown,
         ComprehensiveOutputFormat::Detailed => ReportFormat::Markdown,
         ComprehensiveOutputFormat::Markdown => ReportFormat::Markdown,
         ComprehensiveOutputFormat::Sarif => ReportFormat::Json, // SARIF is JSON-based
+        ComprehensiveOutputFormat::Toon => unreachable!("Toon handled above"),
     };
-
-    // Create a modified report with filtered defects
-    let mut filtered_report = report.clone();
-    filtered_report.defects = filtered_defects;
 
     // Format the report
     match format {

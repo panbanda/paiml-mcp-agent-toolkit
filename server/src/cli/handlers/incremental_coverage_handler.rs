@@ -119,6 +119,7 @@ fn format_result(
         IncrementalCoverageOutputFormat::Lcov => Ok(format_lcov(&result)),
         IncrementalCoverageOutputFormat::Delta => Ok(format_delta(&result, top_files)),
         IncrementalCoverageOutputFormat::Sarif => Ok(format_sarif(&result)),
+        IncrementalCoverageOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(&result),
     }
 }
 

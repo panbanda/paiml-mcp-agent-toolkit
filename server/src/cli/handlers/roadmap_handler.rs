@@ -219,6 +219,9 @@ async fn show_health_report(
         OutputFormat::Table => {
             print_health_console(&sprints);
         }
+        OutputFormat::Toon => {
+            println!("{}", crate::cli::formatting_helpers::to_toon(&sprints)?);
+        }
     }
 
     Ok(())

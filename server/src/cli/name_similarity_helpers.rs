@@ -213,6 +213,7 @@ pub fn output_results(config: OutputConfig) -> Result<()> {
         NameSimilarityOutputFormat::Markdown => {
             format_markdown_output(config.query, config.all_names_len, config.similarities)
         }
+        NameSimilarityOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(config.final_results)?,
     };
 
     if let Some(output_path) = config.output {

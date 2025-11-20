@@ -432,6 +432,7 @@ pub fn format_output(
             format_human_output(table, show_unreferenced)
         }
         crate::cli::SymbolTableOutputFormat::Csv => format_csv_output(table),
+        crate::cli::SymbolTableOutputFormat::Toon => Ok(crate::cli::formatting_helpers::to_toon(&table)?),
     }
 }
 

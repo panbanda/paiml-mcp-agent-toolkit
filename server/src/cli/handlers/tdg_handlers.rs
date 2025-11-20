@@ -500,6 +500,7 @@ async fn compare_baseline(
             // SARIF not implemented yet, use text
             comparison.format_text()
         }
+        crate::cli::TdgOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(&comparison)?,
     };
 
     println!("\n{}", output_str);
@@ -591,6 +592,22 @@ async fn list_baselines(path: &Path, format: crate::cli::TdgOutputFormat) -> Res
                     baseline.summary.total_files, baseline.summary.avg_score
                 );
             }
+        }
+        crate::cli::TdgOutputFormat::Toon => {
+            let output = baselines
+                .iter()
+                .map(|(path, baseline)| {
+                    serde_json::json!({
+                        "path": path.display().to_string(),
+                        "version": baseline.version,
+                        "created_at": baseline.created_at,
+                        "total_files": baseline.summary.total_files,
+                        "avg_score": baseline.summary.avg_score,
+                        "git_context": baseline.git_context
+                    })
+                })
+                .collect::<Vec<_>>();
+            println!("{}", crate::cli::formatting_helpers::to_toon(&output)?);
         }
     }
 
@@ -846,6 +863,13 @@ fn format_tdg_score(
             // For SARIF format, return simplified score
             Ok(format!("{:.1}", score.total))
         }
+        TdgOutputFormat::Toon => {
+            let data = serde_json::json!({
+                "score": score,
+                "git_context": git_context,
+            });
+            crate::cli::formatting_helpers::to_toon(&data)
+        }
     }
 }
 
@@ -1058,6 +1082,9 @@ async fn handle_check_regression(
         crate::cli::TdgOutputFormat::Markdown => {
             println!("Markdown format not yet implemented for quality gates");
         }
+        crate::cli::TdgOutputFormat::Toon => {
+            println!("{}", crate::cli::formatting_helpers::to_toon(&result)?);
+        }
     }
 
     // Exit with error if requested and gate failed
@@ -1127,6 +1154,9 @@ async fn handle_check_quality(
         }
         crate::cli::TdgOutputFormat::Markdown => {
             println!("Markdown format not yet implemented for quality gates");
+        }
+        crate::cli::TdgOutputFormat::Toon => {
+            println!("{}", crate::cli::formatting_helpers::to_toon(&result)?);
         }
     }
 

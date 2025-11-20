@@ -523,6 +523,11 @@ fn format_refactor_status(
         RefactorOutputFormat::Json => format_as_json(checkpoint_data),
         RefactorOutputFormat::Table => format_as_table(checkpoint_data),
         RefactorOutputFormat::Summary => format_as_summary(checkpoint_data, checkpoint.as_path()),
+        RefactorOutputFormat::Toon => {
+            let parsed: serde_json::Value = serde_json::from_str(checkpoint_data)?;
+            println!("{}", crate::cli::formatting_helpers::to_toon(&parsed)?);
+            Ok(())
+        }
     }
 }
 

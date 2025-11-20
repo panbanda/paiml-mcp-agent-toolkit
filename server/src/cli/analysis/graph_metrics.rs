@@ -623,6 +623,7 @@ fn format_output(
             Ok("GraphML export handled separately.".to_string())
         }
         crate::cli::GraphMetricsOutputFormat::Markdown => format_gm_as_markdown(result),
+        crate::cli::GraphMetricsOutputFormat::Toon => Ok(crate::cli::formatting_helpers::to_toon(&result)?),
     }
 }
 

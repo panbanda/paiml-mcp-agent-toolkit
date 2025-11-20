@@ -214,6 +214,7 @@ fn format_analysis_output(
         BigOOutputFormat::Markdown => Ok(analyzer.format_as_markdown(report)),
         BigOOutputFormat::Summary => Ok(format_big_o_summary(report)),
         BigOOutputFormat::Detailed => Ok(format_big_o_detailed(report)),
+        BigOOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(report),
     }
 }
 

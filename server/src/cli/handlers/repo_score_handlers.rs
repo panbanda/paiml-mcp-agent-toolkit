@@ -49,6 +49,7 @@ pub async fn handle_repo_score(
         RepoScoreOutputFormat::Json => format_json(&score)?,
         RepoScoreOutputFormat::Markdown => format_markdown(&score),
         RepoScoreOutputFormat::Yaml => format_yaml(&score)?,
+        RepoScoreOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(&score)?,
     };
 
     // Write output

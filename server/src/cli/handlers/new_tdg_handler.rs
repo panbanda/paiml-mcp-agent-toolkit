@@ -68,6 +68,7 @@ fn format_project_result(
             let sarif = create_sarif_output(project_score);
             serde_json::to_string_pretty(&sarif)?
         }
+        TdgOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(project_score)?,
     };
     Ok(result)
 }
@@ -81,6 +82,7 @@ fn format_file_result(score: &crate::tdg::TdgScore, format: &TdgOutputFormat) ->
             let sarif = create_file_sarif_output(score);
             serde_json::to_string_pretty(&sarif)?
         }
+        TdgOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(score)?,
     };
     Ok(result)
 }
@@ -127,6 +129,7 @@ fn format_comparison_result(
         TdgOutputFormat::Sarif => {
             anyhow::bail!("SARIF format is not supported for comparisons")
         }
+        TdgOutputFormat::Toon => crate::cli::formatting_helpers::to_toon(comparison)?,
     };
     Ok(result)
 }

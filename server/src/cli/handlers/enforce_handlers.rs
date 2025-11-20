@@ -612,6 +612,10 @@ fn output_result(
             });
             println!("{}", serde_json::to_string_pretty(&sarif)?);
         }
+        EnforceOutputFormat::Toon => {
+            let output = crate::cli::formatting_helpers::to_toon(result)?;
+            println!("{output}");
+        }
     }
     Ok(())
 }
